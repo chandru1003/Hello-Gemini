@@ -1,26 +1,16 @@
 # Importing Necessary Libraries
 from pygame import mixer
-import wolframalpha
 import time
-import requests
 import pyttsx3
 import datetime
-import wikipedia
-import os
-import webbrowser
-import cv2
-import random
-import pyjokes
 import speech_recognition as sr
 from getpass import getpass
 from requests import get
 
-# Counter for password attempts
-i = 1
 
 # Set tone for listening
 mixer.init()
-mixer.music.load("demo.mpeg")
+mixer.music.load("ringtone.mpeg")
 mixer.music.set_volume(0.7)
 
 # Voices based Command
@@ -51,9 +41,9 @@ def wish_gemini():
     time.sleep(2)
     speak(f"It's {date_time2}")
     time.sleep(2)
-    speak("I am Gemini, Your Virtual Assistant 2.2.0. Please tell me how may I help you")
+    speak("I am Gemini, Your Virtual Assistant 1.0.1 Please tell me how may I help you")
     time.sleep(2)
-
+'''
 # Function for taking command from user
 def take_gemini_command():
     r = sr.Recognizer()
@@ -76,6 +66,33 @@ def take_gemini_command():
         return "None"
     
     return query
+'''
+def take_gemini_command():
+    r = sr.Recognizer()
+    print(sr.Microphone.list_microphone_names())
+    
+    with sr.Microphone() as source:
+        try:
+            r.adjust_for_ambient_noise(source,duration=1)
+            print("Listening....")
+            r.pause_threshold = 1
+            audio = r.listen(source)
+            print("Recognizing..........")
+            query = r.recognize_google(audio, language='en-in')
+            print(f"User Said: {query}\n")
+            return query.lower()
+        except sr.WaitTimeoutError:
+            print("Timeout waiting for speech input.")
+            return "None"
+        except sr.UnknownValueError:
+            print("Unable to recognize speech.")
+            return "None"
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            return "None"
+
+
+
 
 # List of supported functions
 supported_functions = [wish_gemini, take_gemini_command]
